@@ -1,0 +1,48 @@
+.header{
+  margin-top: 0;
+  background-color: var(--background-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 100px;
+  border: 7px solid white;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  padding: 5px 28px;
+
+  &__logo{
+
+    &-link{
+      position: relative;
+      right: 50%;
+    }
+    &-img{
+      width: 317px;
+      height: 80px;
+    }
+  }
+
+  &__nav{
+    display: flex;
+    gap: 40px;
+
+    &-second{
+      display: flex;
+      gap: 39px;
+    }
+
+    &-account{
+      margin-top: 4px;
+    }
+
+    &-element{
+      color: black;
+      font-size: 24px;
+      font-weight: 600;
+    }
+  }
+
+}

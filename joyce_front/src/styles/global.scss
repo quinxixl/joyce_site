@@ -1,0 +1,16 @@
+@import 'reset.css';
+@import 'animations/animation.css';
+@import 'variables.css';
+@import './header/header.css';
+@import './mainpage/mainPage.css';
+
+
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&family=Montserrat+Alternates:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+body{
+  font-family: "Montserrat Alternates", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  background-color: var(--background-color);
+}
+

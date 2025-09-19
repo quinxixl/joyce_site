@@ -1,0 +1,41 @@
+.header {
+  margin-top: 0;
+  background-color: var(--background-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 100px;
+  border: 7px solid white;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  padding: 5px 28px;
+}
+.header__logo-link {
+  position: relative;
+  right: 50%;
+}
+.header__logo-img {
+  width: 317px;
+  height: 80px;
+}
+.header__nav {
+  display: flex;
+  gap: 40px;
+}
+.header__nav-second {
+  display: flex;
+  gap: 39px;
+}
+.header__nav-account {
+  margin-top: 4px;
+}
+.header__nav-element {
+  color: black;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+/*# sourceMappingURL=header.css.map */

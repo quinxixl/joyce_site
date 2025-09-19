@@ -1,0 +1,37 @@
+.section__title {
+  width: 98%;
+  display: flex;
+  gap: 70px;
+  margin: 0 28px;
+}
+.section__title-aboutUS {
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+  margin-top: 177px;
+}
+.section__title-title {
+  font-size: 64px;
+  font-weight: bold;
+}
+.section__title-description {
+  font-size: 36px;
+  font-weight: 400;
+  line-height: 40px;
+}
+.section__title-button {
+  border-radius: 100px;
+  background-color: var(--pinq-color);
+  color: #fff;
+  font-size: 48px;
+  font-weight: 400;
+  padding: 10px 0;
+}
+.section__title-pictures {
+  width: 1072px;
+}
+.section__title-picture {
+  border-radius: 100px;
+}
+
+/*# sourceMappingURL=sectionOne.css.map */
