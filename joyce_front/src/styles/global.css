@@ -2,6 +2,7 @@
 @import 'animations/animation.css';
 @import 'variables.css';
 @import './header/header.css';
+@import './footer/footer.css';
 @import './mainpage/mainPage.css';
 @import url("https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&family=Montserrat+Alternates:wght@100;200;300;400;500;600;700;800;900&display=swap");
 body {

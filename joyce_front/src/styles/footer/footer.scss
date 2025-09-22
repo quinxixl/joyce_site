@@ -1,0 +1,46 @@
+.footer {
+  &-container {
+    margin-top: 139px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__logo{
+    width: 341px;
+    height: 86px;
+    align-self: center;
+  }
+
+  &__section{
+    display: flex;
+    justify-content: space-between;
+    margin: 45px 30px 10px 30px;
+  }
+
+  &__nav{
+    display: flex;
+    align-self: center;
+    gap: 70px;
+
+    &-element{
+      font-size: 24px;
+      font-weight: 600;
+      color: black;
+    }
+  }
+
+  &__services{
+    display: flex;
+    gap: 115px;
+  }
+
+  &__payment{
+    display: flex;
+    gap: 15px;
+  }
+
+  &__links{
+    display: flex;
+    gap: 10px;
+  }
+}

@@ -1,0 +1,39 @@
+.footer-container {
+  margin-top: 139px;
+  display: flex;
+  flex-direction: column;
+}
+.footer__logo {
+  width: 341px;
+  height: 86px;
+  align-self: center;
+}
+.footer__section {
+  display: flex;
+  justify-content: space-between;
+  margin: 45px 30px 10px 30px;
+}
+.footer__nav {
+  display: flex;
+  align-self: center;
+  gap: 70px;
+}
+.footer__nav-element {
+  font-size: 24px;
+  font-weight: 600;
+  color: black;
+}
+.footer__services {
+  display: flex;
+  gap: 115px;
+}
+.footer__payment {
+  display: flex;
+  gap: 15px;
+}
+.footer__links {
+  display: flex;
+  gap: 10px;
+}
+
+/*# sourceMappingURL=footer.css.map */

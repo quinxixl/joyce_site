@@ -1,4 +1,6 @@
 import React from "react";
+import SliderBestSeller from "../../components/animation/SliderBestSeller";
+
 
 function SectionBestSeller() {
     return (
@@ -6,8 +8,8 @@ function SectionBestSeller() {
             <p className="section__bestSeller-title">
                 ХИТЫ ПРОДАЖ
             </p>
-            <div class="swiper-container">
-
+            <div className="slider--wrapper">
+                <SliderBestSeller />
             </div>
         </div>
     )

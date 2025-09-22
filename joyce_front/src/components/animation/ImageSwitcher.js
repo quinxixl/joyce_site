@@ -4,9 +4,7 @@ const ImageFadeSwitcher = ({
                                images,
                                interval = 3000,
                                fadeDuration = 1000,
-                               objectFit = 'cover',
                                className = 'section__title-picture',
-                               altPrefix = 'Image'
                            }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isVisible, setIsVisible] = useState(true);
