@@ -2,3 +2,5 @@
 joyce_front/node_modules
 .DS_Store
 joyce_front/build
+joyce_backend/node_modules
+joyce_backend/build

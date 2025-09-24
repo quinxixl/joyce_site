@@ -1,0 +1,39 @@
+{
+  "kind": "collectionType",
+  "collectionName": "cards",
+  "info": {
+    "singularName": "card",
+    "pluralName": "cards",
+    "displayName": "Card"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "price": {
+      "type": "integer"
+    },
+    "previewPicture": {
+      "type": "string"
+    },
+    "bgPicture": {
+      "type": "string"
+    },
+    "hashtag1": {
+      "type": "string"
+    },
+    "hashtag2": {
+      "type": "string"
+    },
+    "lists": {
+      "type": "json"
+    },
+    "category": {
+      "type": "json"
+    }
+  }
+}

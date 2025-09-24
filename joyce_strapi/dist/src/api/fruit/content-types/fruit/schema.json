@@ -1,0 +1,30 @@
+{
+    "kind": "collectionType",
+    "collectionName": "fruits",
+    "info": {
+        "singularName": "fruit",
+        "pluralName": "fruits",
+        "displayName": "Fruit"
+    },
+    "options": {
+        "draftAndPublish": true
+    },
+    "pluginOptions": {},
+    "attributes": {
+        "name": {
+            "type": "string"
+        },
+        "image_src": {
+            "type": "string"
+        },
+        "count": {
+            "type": "integer"
+        },
+        "in_sklad": {
+            "type": "boolean"
+        },
+        "price": {
+            "type": "decimal"
+        }
+    }
+}
