@@ -3,7 +3,6 @@ import React from "react";
 import LogoIllustration from "../../illustrations/logo.svg";
 import CartIcon from "../../icons/shopping_bag.svg";
 import AccountIcon from "../../icons/account_circle.svg";
-import Catalog from "../../Pages/Catalog";
 
 function Header() {
     return (

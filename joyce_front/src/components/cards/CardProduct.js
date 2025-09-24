@@ -21,12 +21,11 @@ const CardProduct = ({ item }) => {
                             </div>
                             <div className="card__overlay-list">
                                 <ul className="card__overlay-list-main">
-                                    <li className="card__overlay-list-element">{item.list1}</li>
-                                    <li className="card__overlay-list-element">{item.list2}</li>
-                                    <li className="card__overlay-list-element">{item.list3}</li>
-                                    <li className="card__overlay-list-element">{item.list4}</li>
-                                    <li className="card__overlay-list-element">{item.list5}</li>
-                                    <li className="card__overlay-list-element">{item.list6}</li>
+                                    {item.lists && item.lists.map((listItem, index) => (
+                                        <li key={index} className="card__overlay-list-element">
+                                            {listItem}
+                                        </li>
+                                    ))}
                                 </ul>
                             </div>
                             <p class="card__overlay-volume">Объем: 500 мл.</p>
