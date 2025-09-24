@@ -15,7 +15,7 @@ function Footer() {
             <img src={logo} className="footer__logo" />
             <div className="footer__section">
                 <nav className="footer__nav">
-                    <a href="#" className="footer__nav-element">Каталог</a>
+                    <a href="/catalog" className="footer__nav-element">Каталог</a>
                     <a href="#" className="footer__nav-element">Конструктор фреша</a>
                     <a href="#" className="footer__nav-element">Корзина</a>
                     <a href="#" className="footer__nav-element">Личный кабинет</a>

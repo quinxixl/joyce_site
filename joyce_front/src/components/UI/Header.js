@@ -9,11 +9,11 @@ function Header() {
     return (
         <header className="header">
             <nav className="header__nav">
-                <a href="#" class="header__nav-element header__nav-catalog">Каталог</a>
+                <a href="/catalog" class="header__nav-element header__nav-catalog">Каталог</a>
                 <a href="#" class="header__nav-element header__nav-construction">Конструктор фреша</a>
             </nav>
             <div class="header__logo-container">
-                <a href="#" className="header__logo-link">
+                <a href="/" className="header__logo-link">
                     <img src={LogoIllustration} alt="Логотип компании Джойс" className="header__logo-img" />
                 </a>
             </div>
