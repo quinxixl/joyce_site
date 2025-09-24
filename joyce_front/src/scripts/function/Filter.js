@@ -1,5 +1,6 @@
-import React, {useMemo} from "react";
+import React, {useMemo, useState} from "react";
 import Fuse from 'fuse.js'
+import CardProduct from "../../components/cards/CardProduct";
 
 const cardCatalogArray = [
     {
@@ -101,51 +102,83 @@ const cardCatalogArray = [
 ]
 
 const Filter = () => {
-    const [searchQuery, setSearchQuery] = React.useState('');
-    const [selectedCategory, setSelectedCategory] = React.useState('all');
+    const [searchQuery, setSearchQuery] = useState('');
+    const [selectedFruit, setSelectedFruit] = useState('all');
 
     const fuse = useMemo(() => new Fuse( cardCatalogArray,{
         keys: ['name', 'title', 'category'],
-        threshold: 0.5,
+        threshold: 0.3,
         minMatchCharLength: 2,
     }), []);
 
-    const categories = useMemo(() => {
-        const uniqueCards = [...new Set(cardCatalogArray.map(el => el.category))];
-        return ['all', ...uniqueCats];
-    })
-    const filteredData = useMemo(() => {
-        if (!searchQuery && selectedCategory === 'all') {
-            return cardCatalogArray;
-        }
+    const allFruits = useMemo(() => {
+        const fruitsSet = new Set();
+        cardCatalogArray.forEach(item => {
+            if (item.category && Array.isArray(item.category)) {
+                item.category.forEach(fruit => fruitsSet.add(fruit));
+            }
+        });
+        return ['all', ...Array.from(fruitsSet).sort()];
+    }, []);
 
+    const filteredData = useMemo(() => {
         let results = [...cardCatalogArray];
 
-        if (searchQuery) {
+        if (searchQuery.trim()) {
             const searchResults = fuse.search(searchQuery);
             results = searchResults.map(result => result.item);
         }
 
-        if (selectedCategory !== 'all') {
-            results = results.filter(item => item.category === selectedCategory);
+        if (selectedFruit !== 'all') {
+            results = results.filter(item =>
+                item.category && item.category.includes(selectedFruit)
+            );
         }
 
         return results;
-    }, [searchQuery, selectedCategory, fuse]);
+    }, [searchQuery, selectedFruit, fuse]);
 
     return (
-        <div className="filter__container">
-            <div className="filter__category">
-                <select
-                className="filter__category-input"
-                value={selectedCategory}
-                onChange={e => setSelectedCategory(e.target.value)}
-                >
-                    {categories.map(category => (
-                        <option key={category} value={category}></option>
-                    ))}
-                </select>
+        <div className="filter-main">
+            <div className="filter__container">
+                <div className="filter__category">
+                    <select
+                        className="filter__category-select"
+                        value={selectedFruit}
+                        onChange={(e) => setSelectedFruit(e.target.value)}
+                    >
+                        {allFruits.map(fruit => (
+                            <option key={fruit} value={fruit} className="filter__category-option">
+                                {fruit === 'all' ? 'Все категории' : fruit}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <div className="filter__search">
+                    <input
+                        className="filter__search-input"
+                        value={searchQuery}
+                        onChange={e => setSearchQuery(e.target.value)}
+                        placeholder="Поиск"
+                    />
+                </div>
+            </div>
+            <div className="filter__card-container">
+                {filteredData.length === 0 ? (
+                    <p class="filter__card-nothing">Ничего не найдено</p>
+                ) : (
+                    <div className="filter__card-item">
+                        {filteredData.map((item, index) => (
+                            <div key={index} >
+                                <CardProduct item={item} />
+                            </div>
+                        ))}
+                    </div>
+                )
+                }
             </div>
         </div>
     )
 }
+
+export default Filter;
