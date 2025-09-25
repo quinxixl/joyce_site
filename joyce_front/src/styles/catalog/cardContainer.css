@@ -1,0 +1,13 @@
+.filter__card-nothing {
+  text-align: center;
+  font-size: 48px;
+  font-weight: 600;
+}
+.filter__card-items {
+  margin: 0 152px;
+  gap: 88px 46px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+/*# sourceMappingURL=cardContainer.css.map */

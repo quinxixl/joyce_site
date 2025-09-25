@@ -1,6 +1,7 @@
-import React, {useMemo, useState} from "react";
+import React, {useMemo, useState, useRef, useEffect} from "react";
 import Fuse from 'fuse.js'
 import CardProduct from "../../components/cards/CardProduct";
+import search from "../../icons/search.svg";
 
 const cardCatalogArray = [
     {
@@ -8,7 +9,7 @@ const cardCatalogArray = [
         name: 'Ягодный бум',
         price: '150',
         previewPicture: 'http://localhost:8080/previewPicture.png',
-        bgPicture: 'http://localhos:8080/bgPicture.png',
+        bgPicture: 'http://localhost:8080/bgPicture.png',
         hashtag1: '#Для энергии',
         hashtag2: '#Детокс',
         lists: [
@@ -31,7 +32,7 @@ const cardCatalogArray = [
         name: 'Цитрусовый бум',
         price: '150',
         previewPicture: 'http://localhost:8080/previewPicture.png',
-        bgPicture: 'http://localhos:8080/bgPicture.png',
+        bgPicture: 'http://localhost:8080/bgPicture.png',
         hashtag1: '#Для энергии',
         hashtag2: '#Детокс',
         lists: [
@@ -48,7 +49,7 @@ const cardCatalogArray = [
         name: 'Кислый джони',
         price: '150',
         previewPicture: 'http://localhost:8080/previewPicture.png',
-        bgPicture: 'http://localhos:8080/bgPicture.png',
+        bgPicture: 'http://localhost:8080/bgPicture.png',
         hashtag1: '#Для энергии',
         hashtag2: '#Детокс',
         lists: [
@@ -65,7 +66,7 @@ const cardCatalogArray = [
         name: 'Яблочный грут',
         price: '150',
         previewPicture: 'http://localhost:8080/previewPicture.png',
-        bgPicture: 'http://localhos:8080/bgPicture.png',
+        bgPicture: 'http://localhost:8080/bgPicture.png',
         hashtag1: '#Для энергии',
         hashtag2: '#Детокс',
         lists: [
@@ -84,7 +85,7 @@ const cardCatalogArray = [
         name: 'Крутой поц',
         price: '150',
         previewPicture: 'http://localhost:8080/previewPicture.png',
-        bgPicture: 'http://localhos:8080/bgPicture.png',
+        bgPicture: 'http://localhost:8080/bgPicture.png',
         hashtag1: '#Для энергии',
         hashtag2: '#Детокс',
         lists: [
@@ -103,7 +104,9 @@ const cardCatalogArray = [
 
 const Filter = () => {
     const [searchQuery, setSearchQuery] = useState('');
-    const [selectedFruit, setSelectedFruit] = useState('all');
+    const [selectedFruits, setSelectedFruits] = useState(['all']); // Массив выбранных
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const dropdownRef = useRef(null);
 
     const fuse = useMemo(() => new Fuse( cardCatalogArray,{
         keys: ['name', 'title', 'category'],
@@ -118,8 +121,50 @@ const Filter = () => {
                 item.category.forEach(fruit => fruitsSet.add(fruit));
             }
         });
-        return ['all', ...Array.from(fruitsSet).sort()];
+        return Array.from(fruitsSet).sort();
     }, []);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setIsDropdownOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
+    const toggleDropdown = () => {
+        setIsDropdownOpen(!isDropdownOpen);
+    };
+
+    const handleFruitToggle = (fruit) => {
+        setSelectedFruits(prev => {
+            if (fruit === 'all') {
+                return ['all'];
+            }
+
+            let newSelection = prev.includes('all')
+                ? prev.filter(f => f !== 'all')
+                : [...prev];
+
+            if (newSelection.includes(fruit)) {
+                newSelection = newSelection.filter(f => f !== fruit);
+                if (newSelection.length === 0) {
+                    newSelection = ['all'];
+                }
+            } else {
+                newSelection.push(fruit);
+            }
+
+            return newSelection;
+        });
+    };
+
+
 
     const filteredData = useMemo(() => {
         let results = [...cardCatalogArray];
@@ -129,31 +174,68 @@ const Filter = () => {
             results = searchResults.map(result => result.item);
         }
 
-        if (selectedFruit !== 'all') {
+        if (!selectedFruits.includes('all') && selectedFruits.length > 0) {
             results = results.filter(item =>
-                item.category && item.category.includes(selectedFruit)
+                    item.category && selectedFruits.some(fruit =>
+                        item.category.includes(fruit)
+                    )
             );
         }
 
         return results;
-    }, [searchQuery, selectedFruit, fuse]);
+    }, [searchQuery, selectedFruits, fuse]);
 
     return (
         <div className="filter-main">
             <div className="filter__container">
-                <div className="filter__category">
-                    <select
-                        className="filter__category-select"
-                        value={selectedFruit}
-                        onChange={(e) => setSelectedFruit(e.target.value)}
+                <div className="filter__category" ref={dropdownRef}>
+                    <button
+                        className="filter__dropdown-button"
+                        onClick={toggleDropdown}
                     >
-                        {allFruits.map(fruit => (
-                            <option key={fruit} value={fruit} className="filter__category-option">
-                                {fruit === 'all' ? 'Все категории' : fruit}
-                            </option>
-                        ))}
-                    </select>
+                        <span className="filter__dropdown-title">
+                           Ингредиенты
+                        </span>
+                        <span className={`filter__dropdown-arrow ${isDropdownOpen ? 'open' : ''}`}>
+                            ▼
+                        </span>
+                    </button>
+
+                    {isDropdownOpen && (
+                        <div className="filter__dropdown-menu">
+                            <label className="filter__dropdown-option">
+                                <input
+                                    type="checkbox"
+                                    checked={selectedFruits.includes('all')}
+                                    onChange={() => handleFruitToggle('all')}
+                                    className="filter__dropdown-input"
+                                />
+                                <span className="filter__dropdown-custom"></span>
+                                <span className="filter__dropdown-label">
+                                    Все ингредиенты
+                                </span>
+                            </label>
+
+                            <div className="filter__dropdown-divider"></div>
+
+                            {allFruits.map(fruit => (
+                                <label key={fruit} className="filter__dropdown-option">
+                                    <input
+                                        type="checkbox"
+                                        checked={selectedFruits.includes(fruit)}
+                                        onChange={() => handleFruitToggle(fruit)}
+                                        className="filter__dropdown-input"
+                                    />
+                                    <span className="filter__dropdown-custom"></span>
+                                    <span className="filter__dropdown-label">
+                                        {fruit}
+                                    </span>
+                                </label>
+                            ))}
+                        </div>
+                    )}
                 </div>
+
                 <div className="filter__search">
                     <input
                         className="filter__search-input"
@@ -161,21 +243,22 @@ const Filter = () => {
                         onChange={e => setSearchQuery(e.target.value)}
                         placeholder="Поиск"
                     />
+                    <img src={search} className="filter__search-icon" />
                 </div>
             </div>
+
             <div className="filter__card-container">
                 {filteredData.length === 0 ? (
-                    <p class="filter__card-nothing">Ничего не найдено</p>
+                    <p className="filter__card-nothing">Ничего не найдено</p>
                 ) : (
-                    <div className="filter__card-item">
-                        {filteredData.map((item, index) => (
-                            <div key={index} >
+                    <div className="filter__card-items">
+                        {filteredData.map((item) => (
+                            <div key={item.id}>
                                 <CardProduct item={item} />
                             </div>
                         ))}
                     </div>
-                )
-                }
+                )}
             </div>
         </div>
     )
