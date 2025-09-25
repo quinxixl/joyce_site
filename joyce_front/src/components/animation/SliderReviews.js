@@ -1,49 +1,30 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {Swiper, SwiperSlide} from "swiper/react";
 import { Navigation, Autoplay, EffectCoverflow } from "swiper/modules";
 import CardReviews from "../cards/CardReviews";
 import "swiper/css/bundle";
 
-const cardReviewsArray = [
-    {
-        name: 'Маленюк Н.',
-        image:'http://localhost:8080/reviews.png',
-        description:'Фреши пушка, заказывайте, всем советую. Выпил и почувствовал себя на все 100%',
-        date:'05.09.2025',
-    },
-    {
-        name: 'Маленюк Н.',
-        image:'http://localhost:8080/reviews.png',
-        description:'Фреши пушка, заказывайте, всем советую. Выпил и почувствовал себя на все 100%',
-        date:'06.09.2025',
-    },
-    {
-        name: 'Маленюк Н.',
-        image:'http://localhost:8080/reviews.png',
-        description:'Фреши пушка, заказывайте, всем советую. Выпил и почувствовал себя на все 100%',
-        date:'07.09.2025',
-    },
-    {
-        name: 'Маленюк Н.',
-        image:'http://localhost:8080/reviews.png',
-        description:'Фреши пушка, заказывайте, всем советую. Выпил и почувствовал себя на все 100%',
-        date:'08.09.2025',
-    },
-    {
-        name: 'Маленюк Н.',
-        image:'http://localhost:8080/reviews.png',
-        description:'Фреши пушка, заказывайте, всем советую. Выпил и почувствовал себя на все 100%',
-        date:'09.09.2025',
-    },
-    {
-        name: 'Маленюк Н.',
-        image:'http://localhost:8080/reviews.png',
-        description:'Фреши пушка, заказывайте, всем советую. Выпил и почувствовал себя на все 100%',
-        date:'10.09.2025',
-    },
-]
-
 function SliderReviews() {
+    const [cardReviewsArray, setCardReviewsArray] = useState([])
+    const API_URL = "http://localhost:1337/api/reviews";
+
+    useEffect(() => {
+        const fetchReviews = async () => {
+            const response = await fetch(API_URL);
+            const data = await response.json();
+
+            const transformedData = data.data.map(review => ({
+                name: review.name,
+                image: review.avatar_src,
+                description: review.review,
+                date: review.date,
+            }));
+
+            setCardReviewsArray(transformedData);
+        };
+        fetchReviews();
+    }, []);
+
     return (
         <div className="slider-reviews-container ">
 
@@ -71,7 +52,7 @@ function SliderReviews() {
 
             </Swiper>
         </div>
-    )
+    );
 }
 
 
