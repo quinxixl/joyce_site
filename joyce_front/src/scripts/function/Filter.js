@@ -1,15 +1,14 @@
-import React, {useMemo, useState, useRef, useEffect} from "react";
-import Fuse from 'fuse.js'
+import React, { useMemo, useState, useEffect } from "react";
+import Fuse from "fuse.js";
 import CardProduct from "../../components/cards/CardProduct";
 import search from "../../icons/search.svg";
 
 const Filter = () => {
-    const [searchQuery, setSearchQuery] = useState('');
-    const [selectedFruits, setSelectedFruits] = useState(['all']); // Массив выбранных
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const dropdownRef = useRef(null);
-
     const [cardCatalogArray, setCardCatalogArray] = useState([]);
+    const [query, setQuery] = useState("");
+    const [selectedCategory, setSelectedCategory] = useState([]);
+    const [isOpen, setIsOpen] = useState(false);
+
     const API_URL = "http://localhost:1337/api/cards";
 
     useEffect(() => {
@@ -17,7 +16,7 @@ const Filter = () => {
             const response = await fetch(API_URL);
             const data = await response.json();
 
-            const transformedData = data.data.map(item => ({
+            const transformedData = data.data.map((item) => ({
                 id: item.id.toString(),
                 name: item.name,
                 price: item.price.toString(),
@@ -26,172 +25,104 @@ const Filter = () => {
                 hashtag1: item.hashtag1,
                 hashtag2: item.hashtag2,
                 lists: item.lists || [],
-                category: item.category || []
+                category: item.category || [],
             }));
 
             setCardCatalogArray(transformedData);
         };
+
         fetchCatalog();
     }, []);
 
-    const fuse = useMemo(() => {
-        if (cardCatalogArray.length === 0) return null;
+    const uniqCategory = Array.from(
+        new Set(cardCatalogArray.flatMap((item) => item.category))
+    );
 
+    const fuse = useMemo(() => {
         return new Fuse(cardCatalogArray, {
-            keys: ['name', 'category'], // Исправлены ключи
+            keys: ["category", "name"],
             threshold: 0.3,
-            minMatchCharLength: 2,
         });
     }, [cardCatalogArray]);
 
-    const allFruits = useMemo(() => {
-        const fruitsSet = new Set();
-        cardCatalogArray.forEach(item => {
-            if (item.category && Array.isArray(item.category)) {
-                item.category.forEach(fruit => fruitsSet.add(fruit));
-            }
-        });
-        return Array.from(fruitsSet).sort();
-    }, []);
+    const filterSearch = query
+        ? fuse.search(query).map((res) => res.item)
+        : cardCatalogArray;
 
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-                setIsDropdownOpen(false);
-            }
-        };
-
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
-
-    const toggleDropdown = () => {
-        setIsDropdownOpen(!isDropdownOpen);
+    const checkboxCheck = (category) => {
+        setSelectedCategory((prev) =>
+            prev.includes(category)
+                ? prev.filter((a) => a !== category)
+                : [...prev, category]
+        );
     };
 
-    const handleFruitToggle = (fruit) => {
-        setSelectedFruits(prev => {
-            if (fruit === 'all') {
-                return ['all'];
-            }
-
-            let newSelection = prev.includes('all')
-                ? prev.filter(f => f !== 'all')
-                : [...prev];
-
-            if (newSelection.includes(fruit)) {
-                newSelection = newSelection.filter(f => f !== fruit);
-                if (newSelection.length === 0) {
-                    newSelection = ['all'];
-                }
-            } else {
-                newSelection.push(fruit);
-            }
-
-            return newSelection;
-        });
-    };
-
-
-
-    const filteredData = useMemo(() => {
-        let results = [...cardCatalogArray];
-
-        if (searchQuery.trim()) {
-            const searchResults = fuse.search(searchQuery);
-            results = searchResults.map(result => result.item);
-        }
-
-        if (!selectedFruits.includes('all') && selectedFruits.length > 0) {
-            results = results.filter(item =>
-                    item.category && selectedFruits.some(fruit =>
-                        item.category.includes(fruit)
-                    )
+    const filterCategory =
+        selectedCategory.length === 0
+            ? filterSearch
+            : filterSearch.filter(
+                (item) =>
+                    Array.isArray(item.category) &&
+                    item.category.some((cat) => selectedCategory.includes(cat))
             );
-        }
 
-        return results;
-    }, [searchQuery, selectedFruits, fuse]);
+    const toggleSidebar = () => {
+        setIsOpen((prev) => {
+            const nextState = !prev;
+            if (nextState) {
+                document.body.classList.add("no-scroll");
+            } else {
+                document.body.classList.remove("no-scroll");
+            }
+            return nextState;
+        });
+    };
 
     return (
-        <div className="filter-main">
-            <div className="filter__container">
-                <div className="filter__category" ref={dropdownRef}>
-                    <button
-                        className="filter__dropdown-button"
-                        onClick={toggleDropdown}
-                    >
-                        <span className="filter__dropdown-title">
-                           Ингредиенты
-                        </span>
-                        <span className={`filter__dropdown-arrow ${isDropdownOpen ? 'open' : ''}`}>
-                            ▼
-                        </span>
-                    </button>
+        <div className="filter-container">
 
-                    {isDropdownOpen && (
-                        <div className="filter__dropdown-menu">
-                            <label className="filter__dropdown-option">
-                                <input
-                                    type="checkbox"
-                                    checked={selectedFruits.includes('all')}
-                                    onChange={() => handleFruitToggle('all')}
-                                    className="filter__dropdown-input"
-                                />
-                                <span className="filter__dropdown-custom"></span>
-                                <span className="filter__dropdown-label">
-                                    Все ингредиенты
-                                </span>
-                            </label>
-
-                            <div className="filter__dropdown-divider"></div>
-
-                            {allFruits.map(fruit => (
-                                <label key={fruit} className="filter__dropdown-option">
-                                    <input
-                                        type="checkbox"
-                                        checked={selectedFruits.includes(fruit)}
-                                        onChange={() => handleFruitToggle(fruit)}
-                                        className="filter__dropdown-input"
-                                    />
-                                    <span className="filter__dropdown-custom"></span>
-                                    <span className="filter__dropdown-label">
-                                        {fruit}
-                                    </span>
-                                </label>
-                            ))}
-                        </div>
-                    )}
-                </div>
-
-                <div className="filter__search">
-                    <input
-                        className="filter__search-input"
-                        value={searchQuery}
-                        onChange={e => setSearchQuery(e.target.value)}
-                        placeholder="Поиск"
-                    />
-                    <img src={search} className="filter__search-icon" />
-                </div>
+            <div className={`filter__sideBar-wrapper ${isOpen ? "open" : ""}`}>
+                <div class={`black ${isOpen ? "open__black" : ""}`}></div>
+                <button className="filter__sideBar-close-button" onClick={toggleSidebar}>
+                    ×
+                </button>
+                {uniqCategory.map((category) => (
+                    <label key={category} className="filter__category">
+                        <input
+                            type="checkbox"
+                            checked={selectedCategory.includes(category)}
+                            onChange={() => checkboxCheck(category)}
+                        />
+                        {category}
+                    </label>
+                ))}
             </div>
 
-            <div className="filter__card-container">
-                {filteredData.length === 0 ? (
-                    <p className="filter__card-nothing">Ничего не найдено</p>
-                ) : (
-                    <div className="filter__card-items">
-                        {filteredData.map((item) => (
-                            <div key={item.id}>
-                                <CardProduct item={item} />
-                            </div>
-                        ))}
-                    </div>
-                )}
+            <div className="filter__sideBar-open-button">
+                <button className="filter__sideBar-button" onClick={toggleSidebar}>
+                    <span className="filter__sideBar-text">Ингредиент</span>
+                    <span className="filter__sideBar-icon">☰</span>
+                </button>
+            </div>
+
+            <div className="filter__search-wrapper">
+                <input
+                    className="filter__search-input"
+                    type="search"
+                    placeholder="Поиск"
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                />
+                <img src={search} alt="search" className="filter__search-icon" />
+            </div>
+
+            <div className="card__wrapper">
+                {filterCategory.map((item) => (
+                    <CardProduct key={item.id} item={item} />
+                ))}
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default Filter;
