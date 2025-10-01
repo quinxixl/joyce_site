@@ -1,13 +1,12 @@
 .filter__card{
 
   &-nothing{
-    text-align: center;
-    font-size: 48px;
-    font-weight: 600;
+    font-size: 64px;
+    font-weight: bold;
   }
 
-  &-items{
-    margin:0 152px;
+  &-wrapper{
+    margin:120px 152px;
     gap: 88px 46px;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;

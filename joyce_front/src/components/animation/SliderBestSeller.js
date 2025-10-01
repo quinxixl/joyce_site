@@ -4,10 +4,11 @@ import { Autoplay, Mousewheel, FreeMode } from "swiper/modules";
 import "swiper/css/bundle";
 import CardProduct from "../cards/CardProduct";
 
-function SliderBestSeller() {
+function SliderBestSeller({ addToCart, removeFromCart, cart }) {
     const [cardProductArray, setCardProductArray] = useState([]);
 
     const API_URL = 'http://localhost:1337/api/cards';
+
 
     useEffect(() => {
         const fetchCards = async () => {
@@ -64,9 +65,14 @@ function SliderBestSeller() {
                 resistanceRatio={0.95}
                 threshold={15}
             >
-                {cardProductArray.map((item) => (
+                {cardProductArray.map(item => (
                     <SwiperSlide key={item.id}>
-                        <CardProduct item={item} />
+                        <CardProduct
+                            item={item}
+                            cart={cart}
+                            addToCart={addToCart}
+                            removeFromCart={removeFromCart}
+                        />
                     </SwiperSlide>
                 ))}
             </Swiper>

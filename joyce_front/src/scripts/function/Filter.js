@@ -2,8 +2,9 @@ import React, { useMemo, useState, useEffect } from "react";
 import Fuse from "fuse.js";
 import CardProduct from "../../components/cards/CardProduct";
 import search from "../../icons/search.svg";
+import closeBtn from "../../icons/close.png"
 
-const Filter = () => {
+function Filter({addToCart, removeFromCart, cart}) {
     const [cardCatalogArray, setCardCatalogArray] = useState([]);
     const [query, setQuery] = useState("");
     const [selectedCategory, setSelectedCategory] = useState([]);
@@ -34,13 +35,17 @@ const Filter = () => {
         fetchCatalog();
     }, []);
 
+    const resetFilter = () => {
+        setSelectedCategory([]);
+    }
+
     const uniqCategory = Array.from(
         new Set(cardCatalogArray.flatMap((item) => item.category))
     );
 
     const fuse = useMemo(() => {
         return new Fuse(cardCatalogArray, {
-            keys: ["category", "name"],
+            keys: ["category", "name", "hashtag1", "hashtag2"],
             threshold: 0.3,
         });
     }, [cardCatalogArray]);
@@ -80,11 +85,9 @@ const Filter = () => {
 
     return (
         <div className="filter-container">
-
             <div className={`filter__sideBar-wrapper ${isOpen ? "open" : ""}`}>
-                <div class={`black ${isOpen ? "open__black" : ""}`}></div>
                 <button className="filter__sideBar-close-button" onClick={toggleSidebar}>
-                    ×
+                    <img src={closeBtn} alt="Закрыть"/>
                 </button>
                 {uniqCategory.map((category) => (
                     <label key={category} className="filter__category">
@@ -92,34 +95,54 @@ const Filter = () => {
                             type="checkbox"
                             checked={selectedCategory.includes(category)}
                             onChange={() => checkboxCheck(category)}
+                            className="filter__category-checkbox"
                         />
-                        {category}
+                        <p className="filter__category-text">{category}</p>
                     </label>
                 ))}
-            </div>
 
-            <div className="filter__sideBar-open-button">
-                <button className="filter__sideBar-button" onClick={toggleSidebar}>
-                    <span className="filter__sideBar-text">Ингредиент</span>
-                    <span className="filter__sideBar-icon">☰</span>
+                <button
+                    className="filter__sideBar-reset-button"
+                    onClick={resetFilter}
+                >
+                    Сбросить
                 </button>
             </div>
 
-            <div className="filter__search-wrapper">
-                <input
-                    className="filter__search-input"
-                    type="search"
-                    placeholder="Поиск"
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                />
-                <img src={search} alt="search" className="filter__search-icon" />
+            <div class="filter__buttons-container">
+                <div className="filter__sideBar-open-button">
+                    <button className="filter__sideBar-button" onClick={toggleSidebar}>
+                        <span className="filter__sideBar-text">Ингредиент</span>
+                        <span className="filter__sideBar-icon">☰</span>
+                    </button>
+                </div>
+
+                <div className="filter__hashtag-container">
+
+                </div>
+
+                <div className="filter__search-wrapper">
+                    <input
+                        className="filter__search-input"
+                        type="search"
+                        placeholder="Поиск"
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                    />
+                    <img src={search} alt="search" className="filter__search-icon"/>
+                </div>
             </div>
 
-            <div className="card__wrapper">
+            <div className="filter__card-wrapper">
                 {filterCategory.map((item) => (
-                    <CardProduct key={item.id} item={item} />
+                    <CardProduct key={item.id} item={item} addToCart={addToCart} removeFromCart={removeFromCart} cart={cart} />
                 ))}
+
+                {filterCategory.length === 0 && (
+                    <p className="filter__card-nothing">
+                        Ничего не найдено
+                    </p>
+                )}
             </div>
         </div>
     );

@@ -7,10 +7,10 @@ import RevealText from "../components/animation/RevealText";
 import SectionBestSeller from "../sections/mainpage/SectionBestSeller";
 import SectionReviews from "../sections/mainpage/SectionReviews";
 
-function MainPage() {
+function MainPage({cart, addToCart, removeFromCart}) {
     return (
         <React.Fragment>
-            <Header/>
+            <Header cart={cart} addToCart={addToCart} removeFromCart={removeFromCart}/>
             <div style={{paddingTop: '120px'}}></div>
             <RevealText direction='up' delay={100}>
                 <SectionTitle/>
@@ -19,7 +19,7 @@ function MainPage() {
                 <SectionConstruction />
             </RevealText>
             <RevealText direction='up' delay={200}>
-                <SectionBestSeller />
+                <SectionBestSeller addToCart={addToCart} removeFromCart={removeFromCart} cart={cart}/>
             </RevealText>
             <RevealText direction='up' delay={200}>
                 <SectionReviews />
