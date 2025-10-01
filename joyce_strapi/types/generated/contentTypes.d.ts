@@ -391,6 +391,7 @@ export interface ApiCardCard extends Struct.CollectionTypeSchema {
       Schema.Attribute.Private;
     hashtag1: Schema.Attribute.String;
     hashtag2: Schema.Attribute.String;
+    is_hit: Schema.Attribute.Boolean;
     lists: Schema.Attribute.JSON;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::card.card'> &
@@ -405,12 +406,49 @@ export interface ApiCardCard extends Struct.CollectionTypeSchema {
   };
 }
 
-export interface ApiFreshFresh extends Struct.CollectionTypeSchema {
-  collectionName: 'freshes';
+export interface ApiDeliveryAddressDeliveryAddress
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'delivery_addresses';
   info: {
-    displayName: 'Fresh';
-    pluralName: 'freshes';
-    singularName: 'fresh';
+    displayName: 'DeliveryAddress';
+    pluralName: 'delivery-addresses';
+    singularName: 'delivery-address';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    city: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    doorphone: Schema.Attribute.String;
+    entrance: Schema.Attribute.String;
+    floor: Schema.Attribute.String;
+    house_number: Schema.Attribute.String;
+    house_type: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::delivery-address.delivery-address'
+    > &
+      Schema.Attribute.Private;
+    office_number: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    street: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    user_id: Schema.Attribute.BigInteger;
+  };
+}
+
+export interface ApiIngredientIngredient extends Struct.CollectionTypeSchema {
+  collectionName: 'ingredients';
+  info: {
+    displayName: 'Ingredient';
+    pluralName: 'ingredients';
+    singularName: 'ingredient';
   };
   options: {
     draftAndPublish: true;
@@ -419,48 +457,53 @@ export interface ApiFreshFresh extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    description: Schema.Attribute.Text;
+    description: Schema.Attribute.String;
     image_src: Schema.Attribute.String;
-    in_sklad: Schema.Attribute.Boolean;
-    list: Schema.Attribute.JSON;
+    in_stock: Schema.Attribute.Integer;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
-    localizations: Schema.Attribute.Relation<'oneToMany', 'api::fresh.fresh'> &
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::ingredient.ingredient'
+    > &
       Schema.Attribute.Private;
-    name: Schema.Attribute.String;
-    price: Schema.Attribute.Decimal;
+    price: Schema.Attribute.Integer;
     publishedAt: Schema.Attribute.DateTime;
+    title: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
   };
 }
 
-export interface ApiFruitFruit extends Struct.CollectionTypeSchema {
-  collectionName: 'fruits';
+export interface ApiOrderHistoryOrderHistory
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'order_histories';
   info: {
-    displayName: 'Fruit';
-    pluralName: 'fruits';
-    singularName: 'fruit';
+    displayName: 'OrderHistory';
+    pluralName: 'order-histories';
+    singularName: 'order-history';
   };
   options: {
     draftAndPublish: true;
   };
   attributes: {
-    count: Schema.Attribute.Integer;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    image_src: Schema.Attribute.String;
-    in_sklad: Schema.Attribute.Boolean;
+    delivery_address: Schema.Attribute.String;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
-    localizations: Schema.Attribute.Relation<'oneToMany', 'api::fruit.fruit'> &
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::order-history.order-history'
+    > &
       Schema.Attribute.Private;
-    name: Schema.Attribute.String;
-    price: Schema.Attribute.Decimal;
+    order_price: Schema.Attribute.BigInteger;
+    order_status: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    user_id: Schema.Attribute.BigInteger;
   };
 }
 
@@ -1005,8 +1048,9 @@ declare module '@strapi/strapi' {
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
       'api::card.card': ApiCardCard;
-      'api::fresh.fresh': ApiFreshFresh;
-      'api::fruit.fruit': ApiFruitFruit;
+      'api::delivery-address.delivery-address': ApiDeliveryAddressDeliveryAddress;
+      'api::ingredient.ingredient': ApiIngredientIngredient;
+      'api::order-history.order-history': ApiOrderHistoryOrderHistory;
       'api::review.review': ApiReviewReview;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;

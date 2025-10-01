@@ -6,7 +6,7 @@ import RevealText from "../components/animation/RevealText";
 function Catalog() {
     return (
         <React.Fragment>
-            <Header/>
+            <Header  />
             <div style={{paddingTop: '120px'}}></div>
             <RevealText direction='up' delay={200}>
                 <Filter/>

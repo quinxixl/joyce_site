@@ -1,0 +1,42 @@
+{
+  "kind": "collectionType",
+  "collectionName": "delivery_addresses",
+  "info": {
+    "singularName": "delivery-address",
+    "pluralName": "delivery-addresses",
+    "displayName": "DeliveryAddress"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "user_id": {
+      "type": "biginteger"
+    },
+    "city": {
+      "type": "string"
+    },
+    "street": {
+      "type": "string"
+    },
+    "house_type": {
+      "type": "string"
+    },
+    "house_number": {
+      "type": "string"
+    },
+    "office_number": {
+      "type": "string"
+    },
+    "entrance": {
+      "type": "string"
+    },
+    "floor": {
+      "type": "string"
+    },
+    "doorphone": {
+      "type": "string"
+    }
+  }
+}

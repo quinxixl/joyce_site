@@ -1,4 +1,3 @@
-import React, {useEffect, useState} from 'react';
 import Button from '../../components/buttons/Button';
 import pictureSectionTitle1 from '../../illustrations/pictureSectionTitle-1.jpg';
 import pictureSectionTitle2 from '../../illustrations/pictureSectionTitle-2.jpg';
